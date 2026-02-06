@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gallery Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>body { font-family: "Nunito", sans-serif; }</style>
+  </head>
+  <body class="min-h-screen bg-slate-900 text-white">
+    <main class="mx-auto w-[min(900px,94%)] py-10">
+      <h1 class="text-3xl font-extrabold">Gallery Admin</h1>
+      <p class="mt-2 text-slate-300">No Google account needed. Login with username/password below. Use HTTPS + strong secrets on deployment.</p>
+
+      <section id="loginSection" class="mt-8 rounded-2xl bg-white/10 p-6">
+        <h2 class="text-xl font-bold">Login</h2>
+        <form id="loginForm" class="mt-4 grid gap-3">
+          <input id="username" required placeholder="Username" class="rounded-lg border border-white/20 bg-black/30 px-4 py-2" />
+          <input id="password" type="password" required placeholder="Password" class="rounded-lg border border-white/20 bg-black/30 px-4 py-2" />
+          <button class="rounded-lg bg-emerald-500 px-4 py-2 font-bold text-black">Secure Login</button>
+          <p id="loginMsg" class="text-sm text-rose-300"></p>
+        </form>
+      </section>
+
+      <section id="adminSection" class="mt-8 hidden rounded-2xl bg-white/10 p-6">
+        <h2 class="text-xl font-bold">Upload Artwork Entry</h2>
+        <p class="mt-1 text-sm text-slate-300">Recommended image size: 1280x720 (YouTube thumbnail ratio).</p>
+        <form id="uploadForm" class="mt-4 grid gap-3">
+          <input id="title" required placeholder="Artwork title" class="rounded-lg border border-white/20 bg-black/30 px-4 py-2" />
+          <input id="imageUrl" type="url" required placeholder="Image URL" class="rounded-lg border border-white/20 bg-black/30 px-4 py-2" />
+          <textarea id="description" required placeholder="Description" class="min-h-24 rounded-lg border border-white/20 bg-black/30 px-4 py-2"></textarea>
+          <button class="rounded-lg bg-sky-400 px-4 py-2 font-bold text-black">Add to Gallery</button>
+        </form>
+        <p id="uploadMsg" class="mt-2 text-sm text-emerald-300"></p>
+      </section>
+    </main>
+
+    <script src="/gallery/gallery-data.js"></script>
+    <script>
+      const SECURITY = {
+        username: "admin",
+        saltB64: "B8Qf5Y8f9qJj9Q1nY4TFyg==",
+        iterations: 310000,
+        hashB64: "YfA9+ne5N2zebfIyFnA2Rwj5cYtKQjLJ0VTmN+kkrhQ="
+      };
+
+      const enc = new TextEncoder();
+
+      function b64ToBytes(b64) {
+        const bin = atob(b64);
+        return Uint8Array.from(bin, (c) => c.charCodeAt(0));
+      }
+
+      async function deriveHash(password) {
+        const keyMaterial = await crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveBits"]);
+        const bits = await crypto.subtle.deriveBits(
+          { name: "PBKDF2", salt: b64ToBytes(SECURITY.saltB64), iterations: SECURITY.iterations, hash: "SHA-256" },
+          keyMaterial,
+          256
+        );
+        return btoa(String.fromCharCode(...new Uint8Array(bits)));
+      }
+
+      function timingSafeEqual(a, b) {
+        if (a.length !== b.length) return false;
+        let out = 0;
+        for (let i = 0; i < a.length; i += 1) out |= a.charCodeAt(i) ^ b.charCodeAt(i);
+        return out === 0;
+      }
+
+      const loginSection = document.getElementById("loginSection");
+      const adminSection = document.getElementById("adminSection");
+      const loginMsg = document.getElementById("loginMsg");
+      const uploadMsg = document.getElementById("uploadMsg");
+
+      document.getElementById("loginForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value;
+        const computed = await deriveHash(password);
+
+        if (username === SECURITY.username && timingSafeEqual(computed, SECURITY.hashB64)) {
+          sessionStorage.setItem("astricz_gallery_admin", "1");
+          loginSection.classList.add("hidden");
+          adminSection.classList.remove("hidden");
+          loginMsg.textContent = "";
+        } else {
+          loginMsg.textContent = "Invalid username or password.";
+        }
+      });
+
+      if (sessionStorage.getItem("astricz_gallery_admin") === "1") {
+        loginSection.classList.add("hidden");
+        adminSection.classList.remove("hidden");
+      }
+
+      document.getElementById("uploadForm").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const item = {
+          id: crypto.randomUUID(),
+          title: document.getElementById("title").value.trim(),
+          imageUrl: document.getElementById("imageUrl").value.trim(),
+          description: document.getElementById("description").value.trim(),
+          createdAt: new Date().toLocaleString()
+        };
+
+        const current = JSON.parse(localStorage.getItem(GALLERY_STORAGE_KEY) || "[]");
+        current.unshift(item);
+        saveGalleryItems(current);
+
+        event.target.reset();
+        uploadMsg.textContent = "Added. View it at /gallery.";
+      });
+    </script>
+  </body>
+</html>
