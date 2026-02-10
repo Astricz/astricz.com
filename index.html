@@ -4,66 +4,65 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Astricz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        font-family: "Nunito", "Segoe UI", sans-serif;
+        background: url("https://frutiger-aero.neocities.org/images/backgrounds/blue_aurora.jpg")
+          center / cover no-repeat fixed;
+      }
+    </style>
   </head>
-  <body>
-    <div class="background">
-      <div class="overlay"></div>
-      <div class="bokeh bokeh-one"></div>
-      <div class="bokeh bokeh-two"></div>
-      <div class="bokeh bokeh-three"></div>
-    </div>
+  <body class="min-h-screen overflow-x-hidden text-slate-900">
+    <div class="fixed inset-0 -z-10 bg-gradient-to-br from-white/20 to-sky-400/20"></div>
 
-    <main class="glass-frame" id="home">
-      <header class="top-bar">
-        <div class="brand">astricz.com</div>
-        <a class="pill" href="mailto:astricxzs@gmail.com">Email me</a>
+    <main class="mx-auto my-10 w-[min(1100px,95%)] rounded-3xl border border-white/80 bg-white/60 p-6 shadow-2xl backdrop-blur-2xl md:p-8">
+      <header class="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/80 bg-white/40 px-5 py-4">
+        <div class="text-lg font-extrabold tracking-wide">astricz.com</div>
+        <a class="inline-flex items-center justify-center rounded-full bg-white/80 px-5 py-2 font-bold shadow text-sky-900 transition hover:-translate-y-0.5" href="mailto:astricxzs@gmail.com">Email me</a>
       </header>
 
-      <section class="content">
-        <div class="intro">
-          <h1>Alex O. 💙 🫧</h1>
-          <p>
-            Hi! I'm Alex! I am a musician who primarily focuses on video game music, and arrangements of popular songs.
+      <section class="mt-8 grid gap-7">
+        <div>
+          <h1 class="mb-4 text-4xl font-extrabold text-sky-950 drop-shadow">Alex O. 💙 🫧</h1>
+          <p class="mb-4 leading-7 text-slate-800">
+            I make music inspired by games, anime, and cinematic worlds. My goal is to build tracks that feel emotional, nostalgic, and energetic at the same time.
           </p>
-          <p>
+          <p class="leading-7 text-slate-800">
+            I love arrangement, sound design, and learning how music tells stories. I am also studying Japanese and exploring new ways to connect art, visuals, and sound in one place.
           </p>
         </div>
+      </section>
 
-      <section class="lower" id="about">
-        <div class="panel">
-          <h2>About</h2>
-          <p>
-            I am an American born and raised. I also like to study music theory and I am actively learning Japanese! こんにちは!
+      <section class="mt-6 grid gap-5 md:grid-cols-2" id="about">
+        <div class="rounded-2xl border border-white/80 bg-white/70 p-5">
+          <h2 class="mb-2 text-xl font-extrabold">About me</h2>
+          <p class="leading-7 text-slate-800">
+            I am American, self-driven, and always experimenting with new ideas. Music theory is one of my favorite things to study, and every project teaches me something new.
           </p>
         </div>
-        <div class="panel" id="notes">
-          <h2>Links</h2>
-          <ul>
-            <li><a href="https://musescore.com/user/106348102">Musescore</a></li>
-            <li><a href="https://www.roblox.com/share?code=508d8aa48409a64693c00adcd3e78751&type=Profile&source=ProfileShare&stamp=1767486333881">Roblox</a></li>
+        <div class="rounded-2xl border border-white/80 bg-white/70 p-5" id="notes">
+          <h2 class="mb-2 text-xl font-extrabold">Links</h2>
+          <ul class="list-disc space-y-1 pl-5">
+            <li><a class="font-semibold text-sky-700 hover:underline" href="https://musescore.com/user/106348102">Musescore</a></li>
+            <li><a class="font-semibold text-sky-700 hover:underline" href="https://www.roblox.com/share?code=508d8aa48409a64693c00adcd3e78751&type=Profile&source=ProfileShare&stamp=1767486333881">Roblox</a></li>
           </ul>
         </div>
       </section>
 
-      <section class="contact" id="contact">
-        <div>
-          <h2>Contact Me</h2>
-        </div>
-        <div class="contact-actions">
-          <a class="pill bright" href="mailto:astricxzs@gmail.com">astricxzs@gmail.com</a>
-          <a class="pill ghost" href="https://x.com/astricsz" target="_blank" rel="noreferrer">
-            Twitter
-          </a>
-          <a class="pill ghost" href="https://github.com/astricz" target="_blank" rel="noreferrer">
-            GitHub
-          </a>
+      <section class="mt-8" id="contact">
+        <h2 class="mb-3 text-xl font-extrabold">Contact Me</h2>
+        <div class="flex flex-wrap gap-3">
+          <a class="inline-flex items-center rounded-full bg-sky-500 px-5 py-2 font-bold text-white shadow transition hover:-translate-y-0.5" href="mailto:astricxzs@gmail.com">astricxzs@gmail.com</a>
+          <a class="inline-flex items-center rounded-full border border-white/80 bg-white/70 px-5 py-2 font-bold shadow transition hover:-translate-y-0.5" href="https://x.com/astricsz" target="_blank" rel="noreferrer">Twitter</a>
+          <a class="inline-flex items-center rounded-full border border-white/80 bg-white/70 px-5 py-2 font-bold shadow transition hover:-translate-y-0.5" href="https://github.com/astricz" target="_blank" rel="noreferrer">GitHub</a>
+          <a class="inline-flex items-center rounded-full border border-white/80 bg-white/70 px-5 py-2 font-bold shadow transition hover:-translate-y-0.5" href="/gallery">Gallery</a>
         </div>
       </section>
     </main>
